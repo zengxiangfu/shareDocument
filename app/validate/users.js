@@ -1,6 +1,16 @@
 const getArrParamsData = require("../utils/getArrParamsData");
 
 /**
+ * 普通登陆
+ * @param {*} user 
+ */
+exports.login = user => {
+    const arr = ['name' , 'password'];
+    const res = getArrParamsData(arr,user,false);
+    return res;
+}
+
+/**
  * 插入数据检查
  * @param {*} user 
  */

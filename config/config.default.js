@@ -2,6 +2,8 @@
 
 'use strict';
 
+const decodeToken = require("../app/middleware/decodeToken");
+
 // 开启白名单
 const whiteList = ['127.0.0.1']
 
@@ -38,6 +40,9 @@ module.exports = appInfo => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1607753854563_101';
 
+  // token加密的密钥
+  config.secret = 'shareDocumnet_2020-12_start';
+
   // web安全保障
   config.security = {
     domainWhiteList: whiteList,
@@ -47,7 +52,11 @@ module.exports = appInfo => {
   }
 
   // add your middleware config here
-  config.middleware = ['errorHandler'];
+  config.middleware = ['errorHandler' , 'decodeToken'];
+
+  config.decodeToken = {
+    ignore:['/login']
+  }
 
   // add your user config here
   const userConfig = {

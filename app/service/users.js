@@ -1,7 +1,7 @@
 'use strict';
 
 const Service = require('egg').Service;
-const { insert , update} = require('../validate/users')
+const { login , insert , update} = require('../validate/users')
 
 class UserService extends Service {
 
@@ -9,6 +9,25 @@ class UserService extends Service {
     super(ctx);
     this.mysql = this.app.mysql;
   }
+
+  /**
+   * 登陆信息
+   * @param {*} body 用户名和密码
+   */
+  async login(body){
+    const {err , result} = login(body);
+    if(!err.length) {   
+      let res = await this.mysql.get('users', result);
+      if(res){
+        return this.ctx.repData(0 , res);
+      } else {
+        return this.ctx.repData(3);
+      }
+    } else {
+      return this.ctx.repData(2,null,err[0]);
+    }
+  }
+
   /**
    * 获取用户
    * @param {*} id 
