@@ -4,17 +4,21 @@ const Service = require('egg').Service;
 const { insert , update} = require('../validate/users')
 
 class UserService extends Service {
+
+  constructor(ctx){
+    super(ctx);
+    this.mysql = this.app.mysql;
+  }
   /**
    * 获取用户
    * @param {*} id 
    */
   async getUser(id) {
-    const { app: { mysql } , ctx} = this;
     if(!!Number(id)){
-      let res = await mysql.get('users' , {id:id})
-      return ctx.repData(0,res)
+      let res = await this.mysql.get('users' , {id:id})
+      return this.ctx.repData(0,res)
     } else {
-      return ctx.repData(2)
+      return this.ctx.repData(2)
     }
   }
 
@@ -60,10 +64,18 @@ class UserService extends Service {
    * 删除用户
    * @param {*} id 
    */
-  async delete(id) {
-    const { mysql } = this.app;
-    let res = await mysql.delete('users' , {id:id});
-    return res;
+  async deleteUser(id) {
+    const { app: { mysql } , ctx} = this;
+      try {   
+        let res = await this.mysql.delete('users' , {id:id});
+        if(res.affectedRows === 1){
+          return ctx.repData(0);
+        } else {
+          return ctx.repData(1);
+        }
+      } catch (error) {
+        return ctx.repData(2, null , error.code);
+      }
   }
 }
 
