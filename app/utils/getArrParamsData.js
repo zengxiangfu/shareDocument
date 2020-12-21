@@ -1,6 +1,12 @@
 const getParamResult = require('./getParamResult');
 /**
  * 参数验证，并返回对应的数据
+ * 
+ * @param {*} params 参数
+ * @param {*} data 检索对象
+ * @param {*} isNull 是否允许为空值
+ * @param {*} defaultValue 默认值，只要针对单值
+ * 
  * 使用方式：(假如输出名称为：fn ， 当前是匿名函数)
  *      对象：data: {
  *          name:'testName',
@@ -17,10 +23,7 @@ const getParamResult = require('./getParamResult');
  *          
  *          fn(p2 ,data) => { result: { nickName:'xiaoming'} , err:[]}
  * 
- * @param {*} params 参数
- * @param {*} data 检索对象
- * @param {*} isNull 是否允许为空值
- * @param {*} */ 
+ */ 
 module.exports = (params = [] , data = {} , isNull = true, defaultValue = null) => {
     // 返回的整体数据
     const resData = {
@@ -83,6 +86,11 @@ module.exports = (params = [] , data = {} , isNull = true, defaultValue = null) 
         resData.result.params = data[params] || defaultValue;
     } else {
         resData.err.push('传入数据类型错误！')
+    }
+
+    // 当查询参数全部都不存在
+    if(!Reflect.ownKeys(resData.result).length){
+        resData.err.push('参数异常！')
     }
     return resData;
 }

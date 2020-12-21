@@ -1,6 +1,10 @@
 /**
  * 获取对data中对应参数的值
  * 
+ * @param {*} param 需要参数的 单个值或者数组 string｜string[]
+ * @param {*} data 取值的对象
+ * @param {*} defaultValue 默认值
+ * 
  *  使用方式：(假如输出名称为：fn ， 当前是匿名函数)
  *       data = {
  *          name:'xiaoming',
@@ -12,9 +16,6 @@
  *              内层： fn('obj.title' , data , 'default')  =>   test
  *                    fn('obj[title]' , data , 'default')  =>   test
  * 
- * @param {*} param 
- * @param {*} data 
- * @param {*} defaultValue 
  */
 module.exports = (param , data = {} , defaultValue = null) => {
     let arr = [];
